@@ -1,0 +1,53 @@
+// [id, symbol, category, tip, [[word, ipa], ...], confusableWith]
+const P = (id, symbol, cat, tip, ex, conf) => ({ id, symbol, cat, tip, ex: ex.map(([w, ipa]) => ({ w, ipa })), conf: conf || [] });
+
+const PHONEMES = [
+  // Vowels
+  P('ii', 'iː', 'vowel', 'Long close front vowel. Lips spread in a smile, tongue high and forward.', [['see', 'siː'], ['heat', 'hiːt'], ['believe', 'bɪˈliːv']], ['ɪ']),
+  P('i', 'ɪ', 'vowel', 'Short and relaxed. Tongue a little lower and further back than /iː/.', [['sit', 'sɪt'], ['hit', 'hɪt'], ['milk', 'mɪlk']], ['iː']),
+  P('e', 'e', 'vowel', 'Short mid front vowel. Mouth half open, tongue mid-high.', [['bed', 'bed'], ['head', 'hed'], ['said', 'sed']], ['æ']),
+  P('ae', 'æ', 'vowel', 'Open front vowel. Mouth wide, jaw dropped, tongue low and forward.', [['cat', 'kæt'], ['apple', 'ˈæpl'], ['back', 'bæk']], ['e', 'ʌ']),
+  P('schwa', 'ə', 'vowel', 'The weak, unstressed vowel. Lips and tongue completely relaxed.', [['about', 'əˈbaʊt'], ['comma', 'ˈkɒmə'], ['taken', 'ˈteɪkən']]),
+  P('uh', 'ʌ', 'vowel', 'Short open central vowel. Jaw relaxed, mouth slightly open.', [['cup', 'kʌp'], ['love', 'lʌv'], ['run', 'rʌn']], ['æ', 'ɑː']),
+  P('aa', 'ɑː', 'vowel', 'Long open back vowel. Mouth wide open, tongue low and back.', [['father', 'ˈfɑːðə'], ['car', 'kɑː'], ['palm', 'pɑːm']], ['ʌ']),
+  P('o', 'ɒ', 'vowel', 'Short open back vowel with slightly rounded lips.', [['hot', 'hɒt'], ['dog', 'dɒɡ'], ['want', 'wɒnt']], ['ɔː']),
+  P('oo', 'ɔː', 'vowel', 'Long back vowel. Lips rounded, tongue back and mid-low.', [['thought', 'θɔːt'], ['law', 'lɔː'], ['caught', 'kɔːt']], ['ɒ']),
+  P('u', 'ʊ', 'vowel', 'Short, relaxed. Lips loosely rounded, tongue slightly back.', [['book', 'bʊk'], ['put', 'pʊt'], ['good', 'ɡʊd']], ['uː']),
+  P('uu', 'uː', 'vowel', 'Long close back vowel. Lips tightly rounded and pushed forward.', [['moon', 'muːn'], ['true', 'truː'], ['food', 'fuːd']], ['ʊ']),
+  P('er', 'ɜː', 'vowel', 'Long central vowel. Lips neutral, tongue in the middle of the mouth.', [['bird', 'bɜːd'], ['turn', 'tɜːn'], ['work', 'wɜːk']], ['ə']),
+  P('ei', 'eɪ', 'vowel', 'Diphthong: start at /e/ and glide up toward /ɪ/.', [['face', 'feɪs'], ['say', 'seɪ'], ['play', 'pleɪ']], ['e']),
+  P('ai', 'aɪ', 'vowel', 'Diphthong: start with open /a/, glide toward /ɪ/.', [['my', 'maɪ'], ['time', 'taɪm'], ['high', 'haɪ']]),
+  P('oi', 'ɔɪ', 'vowel', 'Diphthong: start rounded /ɔ/, glide toward /ɪ/.', [['boy', 'bɔɪ'], ['coin', 'kɔɪn'], ['enjoy', 'ɪnˈdʒɔɪ']]),
+  P('ou', 'oʊ', 'vowel', 'Diphthong: start at /o/, round the lips and glide toward /ʊ/.', [['go', 'ɡoʊ'], ['home', 'hoʊm'], ['show', 'ʃoʊ']], ['ɔː']),
+  P('au', 'aʊ', 'vowel', 'Diphthong: start open /a/, glide to rounded /ʊ/.', [['now', 'naʊ'], ['house', 'haʊs'], ['out', 'aʊt']]),
+  P('ie', 'ɪə', 'vowel', 'Diphthong: start at /ɪ/, glide to the relaxed /ə/.', [['near', 'nɪə'], ['here', 'hɪə'], ['idea', 'aɪˈdɪə']]),
+  P('ee', 'eə', 'vowel', 'Diphthong: start at /e/, glide to /ə/.', [['hair', 'heə'], ['care', 'keə'], ['there', 'ðeə']]),
+  P('ue', 'ʊə', 'vowel', 'Diphthong: start at /ʊ/, glide to /ə/.', [['poor', 'pʊə'], ['tour', 'tʊə'], ['sure', 'ʃʊə']]),
+  // Consonants
+  P('p', 'p', 'consonant', 'Voiceless. Close both lips, then release with a puff of air.', [['pen', 'pen'], ['happy', 'ˈhæpi'], ['stop', 'stɒp']], ['b']),
+  P('b', 'b', 'consonant', 'Voiced /p/. Close both lips, release while vibrating the vocal cords.', [['bed', 'bed'], ['baby', 'ˈbeɪbi'], ['tub', 'tʌb']], ['p']),
+  P('t', 't', 'consonant', 'Voiceless. Tongue tip on the ridge behind the top teeth, then release.', [['top', 'tɒp'], ['better', 'ˈbetə'], ['cat', 'kæt']], ['d']),
+  P('d', 'd', 'consonant', 'Voiced /t/. Same tongue position, vocal cords vibrate.', [['dog', 'dɒɡ'], ['middle', 'ˈmɪdl'], ['sad', 'sæd']], ['t']),
+  P('k', 'k', 'consonant', 'Voiceless. Back of the tongue touches the soft palate, then releases.', [['cat', 'kæt'], ['lucky', 'ˈlʌki'], ['back', 'bæk']], ['ɡ']),
+  P('g', 'ɡ', 'consonant', 'Voiced /k/. Same position, vocal cords vibrate.', [['go', 'ɡoʊ'], ['bigger', 'ˈbɪɡə'], ['bag', 'bæɡ']], ['k']),
+  P('f', 'f', 'consonant', 'Voiceless. Top teeth on the lower lip, blow air through.', [['fun', 'fʌn'], ['coffee', 'ˈkɒfi'], ['laugh', 'lɑːf']], ['v', 'p']),
+  P('v', 'v', 'consonant', 'Voiced /f/. Top teeth on lower lip, vocal cords vibrate.', [['voice', 'vɔɪs'], ['over', 'ˈoʊvə'], ['love', 'lʌv']], ['f', 'b']),
+  P('th', 'θ', 'consonant', 'Voiceless. Tongue tip between the teeth, blow air out.', [['think', 'θɪŋk'], ['mouth', 'maʊθ'], ['nothing', 'ˈnʌθɪŋ']], ['s', 'f']),
+  P('dh', 'ð', 'consonant', 'Voiced /θ/. Tongue between the teeth, vocal cords vibrate.', [['this', 'ðɪs'], ['mother', 'ˈmʌðə'], ['breathe', 'briːð']], ['d', 'z']),
+  P('s', 's', 'consonant', 'Voiceless hiss. Tongue tip close to the ridge behind the teeth.', [['sink', 'sɪŋk'], ['mouse', 'maʊs'], ['lesson', 'ˈlesn']], ['θ', 'z']),
+  P('z', 'z', 'consonant', 'Voiced /s/. Same position with a buzzing sound.', [['zoo', 'zuː'], ['lazy', 'ˈleɪzi'], ['buzz', 'bʌz']], ['s', 'ð']),
+  P('sh', 'ʃ', 'consonant', 'Voiceless. Tongue pulled back from /s/, lips slightly rounded.', [['ship', 'ʃɪp'], ['fish', 'fɪʃ'], ['sure', 'ʃʊə']], ['s', 'tʃ']),
+  P('zh', 'ʒ', 'consonant', 'Voiced /ʃ/. Same position with voicing.', [['measure', 'ˈmeʒə'], ['vision', 'ˈvɪʒn'], ['beige', 'beɪʒ']], ['ʃ', 'dʒ']),
+  P('h', 'h', 'consonant', 'Voiceless breath from the throat, mouth shaped for the next vowel.', [['hat', 'hæt'], ['hello', 'həˈloʊ'], ['ahead', 'əˈhed']]),
+  P('ch', 'tʃ', 'consonant', 'Voiceless. /t/ released directly into /ʃ/.', [['chair', 'tʃeə'], ['teacher', 'ˈtiːtʃə'], ['watch', 'wɒtʃ']], ['ʃ', 'dʒ']),
+  P('j', 'dʒ', 'consonant', 'Voiced /tʃ/. /d/ released directly into /ʒ/.', [['jump', 'dʒʌmp'], ['age', 'eɪdʒ'], ['bridge', 'brɪdʒ']], ['tʃ', 'ʒ']),
+  P('m', 'm', 'consonant', 'Lips closed, sound comes through the nose.', [['man', 'mæn'], ['summer', 'ˈsʌmə'], ['time', 'taɪm']], ['n']),
+  P('n', 'n', 'consonant', 'Tongue tip on the ridge behind the teeth, sound through the nose.', [['no', 'noʊ'], ['dinner', 'ˈdɪnə'], ['sun', 'sʌn']], ['m', 'ŋ']),
+  P('ng', 'ŋ', 'consonant', 'Back of the tongue on the soft palate, sound through the nose.', [['sing', 'sɪŋ'], ['thinking', 'ˈθɪŋkɪŋ'], ['long', 'lɒŋ']], ['n']),
+  P('l', 'l', 'consonant', 'Tongue tip on the ridge, air flows around the sides of the tongue.', [['light', 'laɪt'], ['follow', 'ˈfɒloʊ'], ['feel', 'fiːl']], ['r']),
+  P('r', 'r', 'consonant', 'Tongue tip curled back and not touching anything. Lips slightly rounded.', [['red', 'red'], ['sorry', 'ˈsɒri'], ['carrot', 'ˈkærət']], ['l']),
+  P('w', 'w', 'consonant', 'Lips tightly rounded, then glide into the vowel.', [['wet', 'wet'], ['window', 'ˈwɪndoʊ'], ['away', 'əˈweɪ']], ['v']),
+  P('y', 'j', 'consonant', 'Tongue high like /iː/, then glide into the vowel.', [['yes', 'jes'], ['yellow', 'ˈjeloʊ'], ['you', 'juː']]),
+];
+
+if (typeof module !== 'undefined') module.exports = PHONEMES;
